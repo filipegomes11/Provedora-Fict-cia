@@ -1,44 +1,34 @@
 package br.com.provedoraficticia.basicas;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Grafo {
-    private List<Poste> postes;
     private List<Conexao> conexoes;
-    private Poste origem;
 
-    public Grafo(List<Poste> postes, List<Conexao> conexoes, Poste origem) {
-		this.postes = postes;
+    public Grafo(List<Conexao> conexoes) {
 		this.conexoes = conexoes;
-		this.origem = origem;
 	}
-
-	public void addPoste(Poste poste) {
-        postes.add(poste);
-    }
 
     public void addConexao(Conexao conexao) {
         conexoes.add(conexao);
-        conexao.getOrigem().addConexao(conexao);
     }
 
-    public List<Poste> getPostes() {
-        return postes;
+    public List<Conexao> getConectados(Poste poste) {
+    	return conexoes.stream().filter(c -> c.getOrigem().equals(poste) || c.getDestino().equals(poste)).toList();
     }
-
+    
     public List<Conexao> getConexoes() {
         return conexoes;
     }
-
-	public void setPostes(List<Poste> postes) {
-		this.postes = postes;
-	}
-
-	public Poste getOrigem() {
-		return origem;
-	}
-
-	public void setOrigem(Poste origem) {
-		this.origem = origem;
-	}
+    
+    public Set<Poste> getPostes() {
+    	Set<Poste> postes = new HashSet<>();
+    	for(Conexao c: conexoes) {
+    		postes.add(c.getOrigem());
+    		postes.add(c.getDestino());
+    	}
+    	return postes;
+    }
 }
